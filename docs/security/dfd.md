@@ -130,3 +130,4 @@ flowchart TB
 
 > [!CAUTION]
 > **Semua data yang masuk ke TB3 (Browser) harus dianggap terekspos.** Browser adalah untrusted environment — data di React state, console log, dan JS bundle dapat diakses oleh siapa pun yang memiliki akses ke browser, termasuk ekstensi berbahaya dan shared workstation.
+

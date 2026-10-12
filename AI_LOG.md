@@ -43,3 +43,4 @@
 - Setiap threat merujuk elemen DFD spesifik (bukan generik)
 - Alasan kemungkinan dan dampak berdasarkan kondisi aktual produk (mock data di JS bundle, no auth, HTTP dev mode, shared GitHub repo)
 - Rencana kontrol dipetakan ke milestone yang sesuai (M2 untuk backend/auth, M3 untuk kriptografi)
+

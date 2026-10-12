@@ -73,3 +73,4 @@
 | Data in Transit | ⚠️ HTTP di dev, HTTPS jika deploy ke Vercel | TLS 1.3 mandatory (M3) |
 | Autentikasi | ❌ Tidak ada | JWT + bcrypt password hashing (M2) |
 | Integritas Dokumen | ❌ Tidak ada | Digital signature RSA (M3) |
+

@@ -159,3 +159,4 @@ DAMPAK →    1          2          3          4          5
 | R-03 | RBAC middleware + role claims | ✅ | — |
 | R-04 | Server-side source of truth + RSA | ✅ (Server) | ✅ (RSA) |
 | R-05 | TLS 1.3 + HSTS + CSP | — | ✅ |
+
