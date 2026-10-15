@@ -1,35 +1,9 @@
 // mockData.ts — Nusantara Coffee Export Platform
 // Simulated data untuk UI sebelum backend tersedia (Milestone 2)
 
-export interface CoffeeDocument {
-  id: string;
-  title: string;
-  type: "Certificate" | "Invoice" | "Phytosanitary" | "ICO Certificate" | "Bill of Lading";
-  status: "Verified" | "Pending" | "Rejected";
-  origin: string;
-  grade: string;
-  uploadedAt: string;
-  sizeKB: number;
-  uploader: string;
-}
+import type { CoffeeDocument, CoffeeVariety, DashboardStat } from "@/src/lib/tipe";
 
-export interface CoffeeVariety {
-  id: string;
-  name: string;
-  region: string;
-  altitude: string;
-  notes: string;
-  scaScore: number;
-  stockKg: number;
-  priceUSDperKg: number;
-}
-
-export interface DashboardStat {
-  label: string;
-  value: string;
-  change: string;
-  positive: boolean;
-}
+export type { CoffeeDocument, CoffeeVariety, DashboardStat } from "@/src/lib/tipe";
 
 export const mockDocuments: CoffeeDocument[] = [
   {

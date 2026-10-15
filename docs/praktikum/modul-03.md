@@ -4,295 +4,231 @@
 **NIM:** 105224049  
 **Repositori:** https://github.com/urbbaone/105224049-EksporKopi
 
-> Dokumen ini disesuaikan dengan struktur dan implementasi aktual repository. Pada versi repository yang diperiksa, belum ditemukan berkas `lib/tipe.ts`, komponen `DaftarItem`, maupun endpoint/data `item.json`. Model data yang tersedia berada di `src/lib/mockData.ts` dan menggunakan komponen React pada `src/components/`.
+Dokumen ini disusun berdasarkan implementasi aktual pada branch kerja saat ini, tanpa mengklaim bukti visual atau output perintah yang tidak benar-benar dijalankan.
 
-## 1. Tipe Data Produk
+## 1) Tipe Data Produk (`src/lib/tipe.ts`)
 
-### 1.1 Implementasi tipe data yang tersedia
+File sumber tipe telah dipusatkan di:
 
-Repository menggunakan beberapa interface TypeScript di `src/lib/mockData.ts`.
+- `src/lib/tipe.ts`
 
-```typescript
-export interface CoffeeDocument {
-  id: string;
-  title: string;
-  type: "Certificate" | "Invoice" | "Phytosanitary" | "ICO Certificate" | "Bill of Lading";
-  status: "Verified" | "Pending" | "Rejected";
-  origin: string;
-  grade: string;
-  uploadedAt: string;
-  sizeKB: number;
-  uploader: string;
-}
+### 1.1 Definisi tipe utama
 
-export interface CoffeeVariety {
-  id: string;
-  name: string;
-  region: string;
-  altitude: string;
-  notes: string;
-  scaScore: number;
-  stockKg: number;
-  priceUSDperKg: number;
-}
+- `DocumentType` (union type):
+  - `"Certificate" | "Invoice" | "Phytosanitary" | "ICO Certificate" | "Bill of Lading"`
+- `DocumentStatus` (union type):
+  - `"Verified" | "Pending" | "Rejected"`
+- `CoffeeDocument` (interface data dokumen)
+- `CoffeeVariety` (interface data kopi)
+- `DashboardStat` (interface statistik dashboard)
+- `FilterStatus = "All" | DocumentStatus`
+- `FilterType = "All" | DocumentType`
+- `DaftarItemProps`:
+  - `endpoint?: string`
+  - `title?: string`
 
-export interface DashboardStat {
-  label: string;
-  value: string;
-  change: string;
-  positive: boolean;
-}
-```
+### 1.2 Alasan union type
 
-Tipe tersebut digunakan untuk memastikan data dokumen ekspor, varietas kopi, dan statistik dashboard memiliki struktur yang konsisten.
+Union type digunakan agar nilai status/tipe dokumen hanya menerima pilihan valid. Dampak langsung:
 
-### 1.2 Alasan penggunaan union type
+1. mencegah typo nilai string,
+2. memperkuat validasi saat compile-time,
+3. menjaga konsistensi filter dan badge status.
 
-Union type digunakan pada properti `type`, `status`, serta beberapa props komponen karena nilainya dibatasi pada pilihan yang sudah diketahui.
+### 1.3 Alasan optional props
 
-Contoh:
+`DaftarItemProps.endpoint` dan `DaftarItemProps.title` dibuat opsional untuk:
 
-```typescript
-type FilterStatus = "All" | "Verified" | "Pending" | "Rejected";
-type FilterType = "All" | CoffeeDocument["type"];
-```
+- menyediakan konfigurasi default yang aman (`/item.json`, judul bawaan),
+- memungkinkan pengujian endpoint lain tanpa mengubah kontrak komponen.
 
-Penggunaan union type memberikan beberapa manfaat:
+## 2) Struktur Komponen
 
-1. Mencegah nilai di luar daftar yang valid, misalnya status typo `"Verifed"`.
-2. Memberikan autocomplete dan pemeriksaan kesalahan saat pengembangan.
-3. Menjaga filter pada halaman `/documents` tetap sesuai dengan data `CoffeeDocument`.
-4. Memudahkan refactor karena perubahan pilihan status dapat dilacak oleh TypeScript.
-
-### 1.3 Properti opsional
-
-Properti opsional digunakan pada props komponen yang tidak selalu perlu dikirim oleh pemanggil. Contohnya:
-
-```typescript
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: string;
-  hint?: string;
-}
-```
-
-`error` dan `hint` bersifat opsional karena input dapat digunakan tanpa pesan kesalahan atau petunjuk tambahan. Contoh lain terdapat pada komponen `Button`:
-
-```typescript
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger" | "ghost";
-  size?: "sm" | "md" | "lg";
-  loading?: boolean;
-  children: React.ReactNode;
-}
-```
-
-Nilai default diberikan ketika props tidak dikirim, misalnya `variant = "primary"`, `size = "md"`, dan `loading = false`.
-
-## 2. Struktur Komponen
-
-### 2.1 Diagram pohon komponen
-
-Aplikasi menggunakan App Router Next.js. File `app/page.tsx` dan `app/dashboard/page.tsx` tidak memiliki deklarasi `"use client"`, sehingga keduanya merupakan **Server Component**. Halaman `app/documents/page.tsx`, `app/upload/page.tsx`, dan `src/components/Modal.tsx` menggunakan `"use client"` karena membutuhkan state, event handler, atau API browser.
+## 2.1 Pohon Server Component / Client Component
 
 ```text
-Next.js App Router
-├── app/layout.tsx                         [Server Component]
-├── app/page.tsx                           [Server Component]
-│   └── Konten landing page Nusantara Coffee Export
-├── app/dashboard/page.tsx                 [Server Component]
-│   ├── StatCard                            [Server Component]
-│   │   └── Card                            [Server Component]
-│   └── Badge                              [Server Component]
-├── app/documents/page.tsx                 [Client Component]
-│   ├── Badge                               [Server-compatible component]
-│   ├── Button                              [Server-compatible component]
-│   └── Modal                               [Client Component]
-├── app/upload/page.tsx                     [Client Component]
-│   ├── Input                               [Server-compatible component]
-│   ├── SelectField                         [Server-compatible component]
-│   ├── Button                              [Server-compatible component]
-│   └── Alert                               [Server-compatible component]
-└── src/lib/mockData.ts                     [Data/type module]
+app/layout.tsx                          [Server Component]
+├── src/components/Navbar.tsx           [Client Component]
+└── children routes
+
+app/documents/page.tsx                  [Server Component]
+└── src/components/DaftarItem.tsx       [Client Component]
+    ├── src/components/Badge.tsx        [Server-compatible]
+    ├── src/components/Button.tsx       [Server-compatible]
+    └── src/components/Modal.tsx        [Client Component]
+
+app/dashboard/page.tsx                  [Server Component]
+app/upload/page.tsx                     [Client Component]
 ```
 
-> Catatan: `Badge`, `Button`, `Card`, `Input`, dan `SelectField` tidak menggunakan `"use client"`. Komponen-komponen tersebut tidak memiliki state atau event internal sehingga dapat dirender dari Server Component maupun digunakan di dalam Client Component.
+## 2.2 Tabel komponen, props, tipe, dan lokasi
 
-### 2.2 Tabel komponen
-
-| Komponen | Props dan tipe | Tempat digunakan | Jenis |
+| Komponen | Props | Tipe props utama | Lokasi penggunaan |
 |---|---|---|---|
-| `Home` | Tidak ada props | `app/page.tsx` | Server Component |
-| `DashboardPage` | Tidak ada props | `app/dashboard/page.tsx` | Server Component |
-| `DocumentsPage` | Tidak ada props | `app/documents/page.tsx` | Client Component |
-| `UploadPage` | Tidak ada props | `app/upload/page.tsx` | Client Component |
-| `Card` | `children: React.ReactNode`, `className?: string`, `hover?: boolean`, `padding?: "sm" \| "md" \| "lg"` | `StatCard` | Server-compatible |
-| `StatCard` | `label: string`, `value: string`, `change: string`, `positive: boolean`, `icon: string` | `DashboardPage` | Server-compatible |
-| `Badge` | `label: string`, `variant?: BadgeVariant` | `DashboardPage`, `DocumentsPage` | Server-compatible |
-| `Button` | Props HTML button, `variant?`, `size?`, `loading?`, `children` | `DocumentsPage`, `UploadPage` | Server-compatible |
-| `Modal` | `isOpen: boolean`, `onClose: () => void`, `title: string`, `children: React.ReactNode` | `DocumentsPage` | Client Component |
-| `Input` | Props HTML input, `label: string`, `error?: string`, `hint?: string` | `UploadPage` | Server-compatible |
-| `SelectField` | Props HTML select, `label: string`, `error?: string`, `options: { value: string; label: string }[]` | `UploadPage` | Server-compatible |
-| `Alert` | `type`, `title`, `message`, dan props alert terkait | `UploadPage` | Server-compatible |
+| `DocumentsPage` | - | - | `app/documents/page.tsx` |
+| `DaftarItem` | `endpoint?`, `title?` | `DaftarItemProps` | `app/documents/page.tsx` |
+| `Modal` | `isOpen`, `onClose`, `title`, `children` | `boolean`, `() => void`, `string`, `React.ReactNode` | `src/components/DaftarItem.tsx` |
+| `Button` | `variant?`, `size?`, `loading?`, props HTML button | union + `React.ButtonHTMLAttributes<HTMLButtonElement>` | `DaftarItem`, `UploadPage` |
+| `Badge` | `label`, `variant?` | `string`, union variant | `DaftarItem`, `DashboardPage` |
 
-## 3. State dan Interaksi
+## 3) State, Event, dan Alur Render Ulang
 
-### 3.1 State halaman daftar dokumen
+Implementasi ada di `src/components/DaftarItem.tsx`.
 
-Repository tidak memiliki komponen bernama `DaftarItem`. Padanan fungsionalnya adalah `DocumentsPage` pada `app/documents/page.tsx`, yang menampilkan daftar `CoffeeDocument`.
+### 3.1 State yang digunakan
 
-State yang digunakan:
+- `statusFilter: FilterStatus`
+- `typeFilter: FilterType`
+- `selectedDoc: CoffeeDocument | null`
+- `items: CoffeeDocument[]`
+- `loading: boolean`
+- `error: string | null`
+- `reloadToken: number` (untuk retry fetch)
 
-```typescript
-const [statusFilter, setStatusFilter] = useState<FilterStatus>("All");
-const [typeFilter, setTypeFilter] = useState<FilterType>("All");
-const [selectedDoc, setSelectedDoc] = useState<CoffeeDocument | null>(null);
-```
+### 3.2 Event utama
 
-State tersebut memiliki fungsi berikut:
+- klik filter status → `setStatusFilter(...)`
+- klik filter tipe → `setTypeFilter(...)`
+- klik `Detail` → `setSelectedDoc(doc)`
+- klik `Coba lagi` saat error → `setReloadToken(...)`
+- tutup modal → `setSelectedDoc(null)`
 
-- `statusFilter`: menyimpan filter status aktif.
-- `typeFilter`: menyimpan filter jenis dokumen aktif.
-- `selectedDoc`: menyimpan dokumen yang dipilih untuk ditampilkan pada modal detail.
+### 3.3 Alur render ulang
 
-### 3.2 Bukti tab Components
+1. Komponen mount atau `reloadToken` berubah.
+2. `useEffect` menjalankan `fetch(endpoint)`.
+3. `loading=true` menampilkan state memuat.
+4. Jika sukses dan format valid, `items` diisi lalu tabel tampil.
+5. Jika gagal/format invalid, `error` diisi lalu state gagal tampil.
+6. Perubahan filter memicu `useMemo(filtered)` dihitung ulang.
+7. Klik `Detail` membuka modal dengan data dokumen terpilih.
 
-Pada repository yang diperiksa belum terdapat tangkapan layar React DevTools tab **Components**. Bukti yang perlu dilampirkan saat pengumpulan:
+## 4) Pengambilan Data (`item.json`)
 
-1. Jalankan aplikasi dengan `npm run dev`.
-2. Buka halaman `/documents`.
-3. Buka React DevTools → tab **Components**.
-4. Pilih `DocumentsPage`, lalu catat props dan hooks/state yang tampil.
-5. Pilih `Modal` setelah menekan tombol **Detail** pada salah satu dokumen.
-6. Simpan tangkapan layar ke folder `docs/praktikum/`, lalu sematkan dengan format:
+### 4.1 Sumber data
 
-```markdown
-![React DevTools Components — DocumentsPage](./components-documents.png)
-```
+- File: `public/item.json`
+- Akses dari browser: `GET /item.json`
+- Konsumsi data: `src/components/DaftarItem.tsx`
 
-### 3.3 Alur event sampai render ulang
+### 4.2 Kondisi loading / sukses / gagal
 
-1. Pengguna menekan tombol status atau jenis dokumen.
-2. Handler `onClick` memanggil `setStatusFilter` atau `setTypeFilter`.
-3. React memperbarui state pada `DocumentsPage`.
-4. Nilai `filtered` dihitung ulang menggunakan `mockDocuments.filter(...)`.
-5. React melakukan render ulang dan hanya menampilkan dokumen yang sesuai filter.
-6. Jika pengguna menekan tombol **Detail**, `setSelectedDoc(doc)` menyimpan dokumen terpilih.
-7. Nilai `isOpen={!!selectedDoc}` pada `Modal` berubah menjadi `true`, sehingga detail dokumen ditampilkan.
-8. Tombol tutup, klik backdrop, atau tombol `Escape` menjalankan `setSelectedDoc(null)`, lalu modal menghilang pada render berikutnya.
+- **Loading**: panel teks “Memuat data dokumen dari /item.json...”
+- **Sukses**: tabel dokumen tampil + badge status + tombol detail
+- **Gagal**: panel error + tombol `Coba lagi`
 
-## 4. Pengambilan Data
+### 4.3 Validasi format data
 
-### 4.1 Kondisi repository saat ini
+Komponen melakukan validasi runtime sederhana melalui `isCoffeeDocumentArray(...)` sebelum menyimpan data ke state.
 
-Instruksi awal menyebut permintaan `item.json`, kondisi memuat/berhasil/gagal, dan komponen `DaftarItem`. Namun, pada repository yang diperiksa:
+## 5) Verifikasi Teknis (Aktual)
 
-- belum ditemukan endpoint atau file `item.json`;
-- data halaman dashboard dan dokumen berasal dari konstanta lokal `mockDocuments`, `mockCoffees`, dan `dashboardStats`;
-- belum terdapat pemanggilan `fetch` untuk daftar item;
-- belum terdapat state loading/error khusus untuk pengambilan data jaringan.
-
-Dengan demikian, pengujian Network untuk `item.json` belum dapat diklaim sebagai hasil aktual dari repository ini.
-
-### 4.2 Bukti yang harus dilampirkan apabila fitur API telah ditambahkan
-
-Jika tugas praktikum mensyaratkan pengambilan data melalui API, lampirkan:
-
-```markdown
-![Network request item.json](./network-item-json.png)
-```
-
-Tangkapan layar harus memperlihatkan minimal:
-
-| Kondisi | Bukti yang diharapkan |
-|---|---|
-| Memuat | UI menampilkan indikator loading ketika request belum selesai |
-| Berhasil | Request `item.json` berstatus `200`, data item tampil |
-| Gagal | Request gagal atau berstatus bukan `2xx`, pesan error tampil |
-
-## 5. Verifikasi
+Perintah dijalankan di repository ini.
 
 ### 5.1 TypeScript
 
-Perintah verifikasi yang digunakan:
-
 ```bash
 npx tsc --noEmit
 ```
 
-Perintah ini memeriksa tipe seluruh file TypeScript tanpa menghasilkan file JavaScript. Keluaran aktual perlu dicatat setelah perintah dijalankan pada environment pengembangan.
-
-### 5.2 ESLint
-
-Perintah lint yang tersedia pada `package.json` adalah:
-
-```bash
-npm run lint
-```
-
-Script tersebut menjalankan `eslint`. Keluaran aktual perlu ditempelkan pada bagian berikut setelah verifikasi lokal:
+Hasil aktual:
 
 ```text
-[Tempel keluaran npx tsc --noEmit di sini]
-
-[Tempel keluaran npm run lint di sini]
+(exit code 0, tanpa error output)
 ```
 
-### 5.3 Catatan konfigurasi
-
-`package.json` menyediakan script `dev`, `build`, `start`, `lint`, dan `test`, tetapi tidak menyediakan script `typecheck`. Oleh karena itu, pemeriksaan TypeScript dijalankan langsung dengan `npx tsc --noEmit` sesuai instruksi modul.
-
-## 6. Kendala dan Penyelesaian
-
-### 6.1 Perbedaan instruksi modul dengan struktur repository
-
-Instruksi awal merujuk pada `lib/tipe.ts`, `DaftarItem`, dan `item.json`, sedangkan repository aktual menggunakan `src/lib/mockData.ts`, `DocumentsPage`, dan data mock lokal.
-
-**Penyelesaian:** dokumentasi disinkronkan dengan implementasi aktual. Referensi `DaftarItem` dijelaskan sebagai padanan fungsional `DocumentsPage`, sedangkan bagian `item.json` diberi catatan bahwa fiturnya belum tersedia.
-
-### 6.2 Pemisahan Server Component dan Client Component
-
-Halaman yang memakai `useState`, `useForm`, atau event handler harus menggunakan `"use client"`. Sebaliknya, halaman yang hanya menampilkan data mock dan markup dapat tetap menjadi Server Component.
-
-**Penyelesaian:** klasifikasi komponen dilakukan berdasarkan isi file aktual, bukan hanya berdasarkan nama komponen.
-
-### 6.3 Verifikasi bukti visual belum lengkap
-
-Repository belum memuat screenshot React DevTools Components dan Network request `item.json`.
-
-**Penyelesaian:** dokumentasi menyediakan langkah dan nama file yang perlu digunakan untuk melengkapi bukti saat pengujian dilakukan secara lokal.
-
-## 7. Catatan Pemanfaatan AI
-
-**Alat:** GitHub Copilot/agent dan analisis repository GitHub.
-
-**Perintah utama yang digunakan:**
+### 5.2 Lint
 
 ```bash
-npx tsc --noEmit
 npm run lint
-npm run dev
 ```
 
-**Bagian yang digunakan:**
+Hasil aktual:
 
-- membaca struktur repository dan `AGENTS.md`;
-- menyesuaikan dokumentasi Modul 3 dengan file aktual;
-- merangkum tipe data pada `src/lib/mockData.ts`;
-- mengidentifikasi Server Component dan Client Component;
-- menyusun tabel props dan alur state pada `DocumentsPage`;
-- mencatat keterbatasan karena `lib/tipe.ts`, `DaftarItem`, dan `item.json` belum tersedia.
+```text
+> my-app@0.1.0 lint
+> eslint
+```
 
-**Cara verifikasi:**
+### 5.3 Test
 
-1. Isi dokumen dicocokkan dengan `src/lib/mockData.ts`.
-2. Struktur halaman dicocokkan dengan `app/page.tsx`, `app/dashboard/page.tsx`, `app/documents/page.tsx`, dan `app/upload/page.tsx`.
-3. Props komponen dicocokkan dengan file pada `src/components/`.
-4. Script verifikasi dicocokkan dengan `package.json`.
-5. Screenshot Components dan Network harus diambil secara lokal apabila diperlukan sebagai bukti praktikum.
+Script test tersedia (`vitest`), sehingga juga diverifikasi.
 
-## 8. Kesimpulan
+```bash
+npm test
+```
 
-Modul 3 pada repository ini telah menggunakan TypeScript melalui interface, union type, optional props, serta generic/HTML prop inheritance pada komponen React. Halaman dashboard menggunakan Server Component, sedangkan halaman dokumen dan upload menggunakan Client Component karena membutuhkan interaksi dan state.
+Hasil aktual:
 
-Implementasi pengambilan data saat ini masih menggunakan mock data lokal. Oleh sebab itu, bukti `item.json`, loading state, success state, dan error state belum dapat disajikan sebagai hasil aktual sebelum fitur API tersebut ditambahkan atau tersedia pada repository.
+```text
+Test Files  1 passed (1)
+Tests       7 passed (7)
+```
+
+## 6) Daftar Screenshot yang Wajib Dikumpulkan
+
+> Catatan kejujuran bukti: agent tidak membuat screenshot palsu. File berikut **belum ada** di repository pada sesi ini dan harus diambil manual saat demo/laporan lokal.
+
+Simpan di folder: `docs/praktikum/`
+
+1. `components-daftaritem-default.png`  
+   - React DevTools tab **Components**, komponen `DaftarItem` saat sukses.
+2. `components-daftaritem-filter.png`  
+   - React DevTools saat state filter berubah.
+3. `components-daftaritem-modal.png`  
+   - React DevTools saat modal detail terbuka.
+4. `network-item-loading.png`  
+   - DevTools Network saat request `/item.json` masih loading.
+5. `network-item-success.png`  
+   - DevTools Network status `200` untuk `/item.json`.
+6. `network-item-error.png`  
+   - DevTools Network saat gagal (misal endpoint diubah sementara ke path invalid).
+7. `verifikasi-tsc-lint-test.png`  
+   - Terminal berisi `npx tsc --noEmit`, `npm run lint`, `npm test`.
+
+Contoh penyematan markdown:
+
+```md
+![DaftarItem default state](./components-daftaritem-default.png)
+```
+
+## 7) Kendala dan Penyelesaian
+
+1. **Instruksi modul meminta `lib/tipe.ts`, `DaftarItem`, dan `item.json`, tetapi sebelumnya belum ada.**  
+   Penyelesaian: ditambahkan implementasi minimal nyata (`src/lib/tipe.ts`, `src/components/DaftarItem.tsx`, `public/item.json`) dan dihubungkan ke `/documents`.
+
+2. **Perlu menjaga fitur existing agar tidak rusak.**  
+   Penyelesaian: perubahan difokuskan hanya pada jalur dokumen, tanpa mengubah perilaku halaman dashboard/upload.
+
+3. **Bukti screenshot belum bisa diproduksi otomatis secara valid pada sesi ini.**  
+   Penyelesaian: diberikan daftar screenshot dan nama file final yang harus diambil manual.
+
+## 8) Catatan Pemanfaatan AI
+
+Mengikuti format dan semangat `AI_LOG.md`:
+
+- **Alat AI**: GitHub Copilot Coding Agent.
+- **Penggunaan pada Modul 3**:
+  1. audit struktur file dan tipe aktual,
+  2. implementasi komponen `DaftarItem` + fetch `/item.json`,
+  3. sinkronisasi dokumen teknis berbasis kode aktual,
+  4. eksekusi verifikasi `tsc`, `lint`, `test`.
+- **Validasi manusia**:
+  - meninjau diff kode,
+  - memeriksa hasil command (exit code/output),
+  - memastikan dokumentasi tidak mengklaim screenshot palsu.
+
+---
+
+## Ringkasan File yang Diubah
+
+1. `src/lib/tipe.ts` (baru)
+2. `src/lib/mockData.ts`
+3. `src/components/DaftarItem.tsx` (baru)
+4. `public/item.json` (baru)
+5. `app/documents/page.tsx`
+6. `docs/praktikum/modul-03.md`
+
+## Keterbatasan Bukti Screenshot
+
+Bukti screenshot React DevTools/Network/terminal belum ditambahkan sebagai file gambar pada commit ini. Daftar nama file dan lokasi penyimpanan sudah disediakan agar dapat dilengkapi manual secara jujur.

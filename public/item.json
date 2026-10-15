@@ -1,0 +1,68 @@
+[
+  {
+    "id": "DOC-001",
+    "title": "Gayo Arabica Grade 1 — Health Certificate",
+    "type": "Certificate",
+    "status": "Verified",
+    "origin": "Aceh, Sumatra",
+    "grade": "Grade 1",
+    "uploadedAt": "2026-10-01",
+    "sizeKB": 248,
+    "uploader": "Kelompok 7"
+  },
+  {
+    "id": "DOC-002",
+    "title": "Toraja Kalosi — ICO Certificate Oct 2026",
+    "type": "ICO Certificate",
+    "status": "Verified",
+    "origin": "South Sulawesi",
+    "grade": "Grade 1",
+    "uploadedAt": "2026-10-03",
+    "sizeKB": 512,
+    "uploader": "Kelompok 7"
+  },
+  {
+    "id": "DOC-003",
+    "title": "Java Preanger — Phytosanitary Certificate",
+    "type": "Phytosanitary",
+    "status": "Pending",
+    "origin": "West Java",
+    "grade": "Grade 2",
+    "uploadedAt": "2026-10-07",
+    "sizeKB": 180,
+    "uploader": "Kelompok 7"
+  },
+  {
+    "id": "DOC-004",
+    "title": "Bali Kintamani — Export Invoice #INV-2026-041",
+    "type": "Invoice",
+    "status": "Verified",
+    "origin": "Bali",
+    "grade": "Grade 1",
+    "uploadedAt": "2026-10-08",
+    "sizeKB": 95,
+    "uploader": "Kelompok 7"
+  },
+  {
+    "id": "DOC-005",
+    "title": "Flores Bajawa — Bill of Lading",
+    "type": "Bill of Lading",
+    "status": "Rejected",
+    "origin": "East Nusa Tenggara",
+    "grade": "Grade 2",
+    "uploadedAt": "2026-10-09",
+    "sizeKB": 320,
+    "uploader": "Kelompok 7"
+  },
+  {
+    "id": "DOC-006",
+    "title": "Wamena Papua — Organic Certificate",
+    "type": "Certificate",
+    "status": "Pending",
+    "origin": "Papua",
+    "grade": "Grade 1",
+    "uploadedAt": "2026-10-10",
+    "sizeKB": 410,
+    "uploader": "Kelompok 7"
+  }
+]
