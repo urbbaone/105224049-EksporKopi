@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#faf7f2] text-[#2c1810]">
@@ -34,12 +36,12 @@ export default function Home() {
             >
               Explore Quality Process
             </a>
-            <a
-              href="#our-coffees"
+            <Link
+              href="/katalog"
               className="rounded-full border border-amber-400/30 px-8 py-3.5 text-sm font-bold text-amber-200 transition-all hover:border-amber-400/60 hover:bg-amber-900/30"
             >
-              View Our Coffees
-            </a>
+              Lihat Katalog Kopi
+            </Link>
           </div>
         </div>
 
