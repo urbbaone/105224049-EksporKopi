@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    agentUpgrade: "security",
+  },
   // Opsi root-level untuk outputFileTracingRoot
   outputFileTracingRoot: path.join(__dirname, "./"),
   
