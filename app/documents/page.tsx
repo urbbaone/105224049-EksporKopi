@@ -1,24 +1,60 @@
 "use client";
-import { useState } from "react";
-import { mockDocuments, CoffeeDocument } from "@/src/lib/mockData";
+import { useState, useEffect } from "react";
 import Badge from "@/src/components/Badge";
 import Button from "@/src/components/Button";
 import Modal from "@/src/components/Modal";
 import Link from "next/link";
 
-type FilterStatus = "All" | "Verified" | "Pending" | "Rejected";
-type FilterType = "All" | CoffeeDocument["type"];
+// Tipe dokumen dari database (sesuai model Prisma)
+interface DbDocument {
+  id: string;
+  title: string;
+  type: "Certificate" | "Invoice" | "Phytosanitary" | "ICO Certificate" | "Bill of Lading";
+  status: "Verified" | "Pending" | "Rejected";
+  origin: string;
+  grade: string;
+  uploader: string;
+  notes?: string | null;
+  sizeKB: number;
+  createdAt: string;
+}
 
-const docTypeOptions: CoffeeDocument["type"][] = [
+type FilterStatus = "All" | "Verified" | "Pending" | "Rejected";
+type FilterType = "All" | DbDocument["type"];
+
+const docTypeOptions: DbDocument["type"][] = [
   "Certificate", "Invoice", "Phytosanitary", "ICO Certificate", "Bill of Lading"
 ];
 
 export default function DocumentsPage() {
+  const [documents, setDocuments] = useState<DbDocument[]>([]);
+  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<FilterStatus>("All");
   const [typeFilter, setTypeFilter] = useState<FilterType>("All");
-  const [selectedDoc, setSelectedDoc] = useState<CoffeeDocument | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<DbDocument | null>(null);
 
-  const filtered = mockDocuments.filter((doc) => {
+  // Ambil dokumen dari API (PostgreSQL via Prisma)
+  useEffect(() => {
+    fetch("/api/documents")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) setDocuments(json.data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Hapus dokumen
+  const handleDelete = async (id: string) => {
+    if (!confirm("Yakin ingin menghapus dokumen ini?")) return;
+    const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setDocuments((prev) => prev.filter((d) => d.id !== id));
+      setSelectedDoc(null);
+    }
+  };
+
+  const filtered = documents.filter((doc) => {
     const statusMatch = statusFilter === "All" || doc.status === statusFilter;
     const typeMatch = typeFilter === "All" || doc.type === typeFilter;
     return statusMatch && typeMatch;
@@ -37,7 +73,7 @@ export default function DocumentsPage() {
               Export Documents
             </h1>
             <p className="mt-1 text-amber-200/60 text-sm">
-              {mockDocuments.length} documents · {mockDocuments.filter(d => d.status === "Verified").length} verified
+              {loading ? "Memuat…" : `${documents.length} documents · ${documents.filter(d => d.status === "Verified").length} verified`}
             </p>
           </div>
           <Link
@@ -100,7 +136,11 @@ export default function DocumentsPage() {
 
         {/* Results count */}
         <p className="text-sm text-[#9a7e6d]" aria-live="polite">
-          Showing <span className="font-semibold text-[#2c1810]">{filtered.length}</span> of {mockDocuments.length} documents
+          {loading ? (
+            <span>Memuat dokumen dari database…</span>
+          ) : (
+            <>Showing <span className="font-semibold text-[#2c1810]">{filtered.length}</span> of {documents.length} documents</>
+          )}
         </p>
 
         {/* Document list */}
@@ -128,7 +168,7 @@ export default function DocumentsPage() {
                     <tr key={doc.id} className="hover:bg-amber-50 transition-colors">
                       <td className="px-5 py-4">
                         <p className="font-semibold text-[#2c1810] leading-snug">{doc.title}</p>
-                        <p className="mt-0.5 text-xs text-[#9a7e6d]">{doc.id} · {doc.uploadedAt} · {doc.sizeKB} KB</p>
+                        <p className="mt-0.5 text-xs text-[#9a7e6d]">{doc.id} · {new Date(doc.createdAt).toLocaleDateString("id-ID")} · {doc.sizeKB} KB</p>
                       </td>
                       <td className="hidden px-5 py-4 sm:table-cell">
                         <span className="text-xs text-[#6b4c3b]">{doc.type}</span>
@@ -149,8 +189,7 @@ export default function DocumentsPage() {
                           onClick={() => setSelectedDoc(doc)}
                         >
                           Detail
-                        </Button>
-                      </td>
+                        </Button>                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -175,15 +214,26 @@ export default function DocumentsPage() {
               ["Status", selectedDoc.status],
               ["Origin", selectedDoc.origin],
               ["Grade", selectedDoc.grade],
-              ["Uploaded", selectedDoc.uploadedAt],
+              ["Uploaded", new Date(selectedDoc.createdAt).toLocaleDateString("id-ID")],
               ["Size", `${selectedDoc.sizeKB} KB`],
               ["Uploader", selectedDoc.uploader],
+              ["Notes", selectedDoc.notes ?? "-"],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between gap-4 border-b border-[#f0e6d8] pb-2 last:border-0">
                 <dt className="font-semibold text-[#9a7e6d]">{k}</dt>
                 <dd className="text-[#2c1810] text-right">{v}</dd>
               </div>
             ))}
+            {/* Tombol hapus */}
+            <div className="pt-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleDelete(selectedDoc.id)}
+              >
+                🗑️ Hapus Dokumen
+              </Button>
+            </div>
           </dl>
         )}
       </Modal>

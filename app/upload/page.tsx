@@ -46,11 +46,21 @@ export default function UploadPage() {
   });
 
   const onSubmit = async (data: UploadFormData) => {
-    // Simulate async submission (no real backend in Milestone 1)
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log("Form submitted:", data);
-    setSubmitStatus("success");
-    reset();
+    try {
+      // Kirim data ke API Route yang terhubung ke PostgreSQL via Prisma
+      const res = await fetch("/api/documents", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
+      setSubmitStatus("success");
+      reset();
+    } catch {
+      setSubmitStatus("error");
+    }
   };
 
   return (
@@ -89,7 +99,7 @@ export default function UploadPage() {
             <Alert
               type="success"
               title="Document submitted successfully!"
-              message="Your document has been queued for review. Status will update within 1–2 business days."
+              message="Dokumen berhasil disimpan ke database. Status akan diperbarui setelah review."
               dismissible
             />
           </div>
@@ -215,10 +225,10 @@ export default function UploadPage() {
                 )}
               </div>
 
-              {/* Note about file upload */}
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-                <p className="text-xs text-amber-800">
-                  <span className="font-bold">📎 File Upload</span> — Actual file upload akan diimplementasi di <strong>Milestone 2</strong> bersama backend dan enkripsi AES-256.
+              {/* Note about backend */}
+              <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+                <p className="text-xs text-green-800">
+                  <span className="font-bold">🗄️ Database Terhubung</span> — Form ini menyimpan data ke PostgreSQL via Prisma 7. Upload file fisik akan diimplementasi di <strong>Milestone 3</strong> bersama enkripsi AES-256.
                 </p>
               </div>
 

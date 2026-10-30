@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+// Model untuk dokumen ekspor kopi (Coffee Export Documents)
+// Prisma 7 + PostgreSQL
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────
+// Model utama: Dokumen ekspor kopi
+// ─────────────────────────────────────────────────────────
+model Document {
+  id        String   @id @default(cuid())  // ID unik otomatis
+  title     String                          // Judul dokumen
+  type      String                          // Jenis: Certificate, Invoice, dll.
+  status    String   @default("Pending")   // Status: Pending | Verified | Rejected
+  origin    String                          // Asal daerah kopi
+  grade     String                          // Grade kopi: Grade 1/2/3
+  uploader  String                          // Nama pengunggah
+  notes     String?                         // Catatan tambahan (opsional)
+  sizeKB    Int      @default(0)            // Ukuran file (placeholder)
+
+  createdAt DateTime @default(now())       // Waktu upload
+  updatedAt DateTime @updatedAt            // Waktu update terakhir
+
+  @@map("documents")                        // Nama tabel di database
+}
