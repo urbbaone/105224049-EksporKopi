@@ -43,3 +43,4 @@ export function verifySlowHash(password: string, formattedHash: string): boolean
   const derivedKey = pbkdf2Sync(password, salt, iterations, 32, "sha256");
   return derivedKey.toString("hex") === originalHash;
 }
+

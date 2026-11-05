@@ -27,3 +27,4 @@ Summary:
 - Critical Risks: 4 (Memory corruption, buffer overflow, remote execution)
 - High Risks: 12
 - Rekomendasi: Ganti base image dengan minimal Alpine 3.20 / Distroless non-root image.
+

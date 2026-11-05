@@ -65,3 +65,4 @@
      - Set umask 027 in /etc/login.defs and PAM profile
   4. Firewalling:
      - Enabled ufw with default incoming deny ruleset
+

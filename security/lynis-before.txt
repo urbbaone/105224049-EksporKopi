@@ -54,3 +54,4 @@
   - Audit daemon (auditd) is disabled or not running
   - Default system umask is too permissive (022 instead of 027)
   - Firewall service inactive, all ingress traffic accepted
+

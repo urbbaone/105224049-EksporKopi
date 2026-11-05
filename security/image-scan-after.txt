@@ -26,3 +26,4 @@ Justifikasi Temuan Tersisa:
 1. CVE-2023-42363: Kerentanan pada parsing awk busybox. Container runtime app tidak menjalankan shell script awk yang menerima untrusted input.
 2. CVE-2024-4741: Memerlukan negosiasi TLS ALPN kustom pada OpenSSL C library. Komunikasi TLS ditangani oleh reverse proxy terisolasi.
 - Kesimpulan: Target 0 CRITICAL & 0 HIGH terpenuhi (Memenuhi Kriteria 3).
+
