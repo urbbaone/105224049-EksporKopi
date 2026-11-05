@@ -1,0 +1,78 @@
+services:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Reverse Proxy (Nginx Non-Privileged)
+  # Satu-satunya pintu masuk traffic dari luar (Port 80/443)
+  # ─────────────────────────────────────────────────────────────────────────
+  reverse_proxy:
+    image: nginxinc/nginx-unprivileged:alpine
+    container_name: coffee_reverse_proxy
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    networks:
+      - frontend_net
+      - backend_isolated
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Next.js App Backend
+  # Berjalan sebagai user non-root (UID 10001), port internal hanya diakses proxy
+  # ─────────────────────────────────────────────────────────────────────────
+  app_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coffee_app_backend
+    restart: unless-stopped
+    user: "10001:10001"
+    expose:
+      - "3000"
+    networks:
+      - backend_isolated
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://coffee_user:coffee_secure_pass@database:5432/coffee_db?schema=public
+    depends_on:
+      - database
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Database PostgreSQL
+  # Terisolasi penuh di jaringan internal (TIDAK ADA PORT DIEKSPOS KE HOST)
+  # ─────────────────────────────────────────────────────────────────────────
+  database:
+    image: postgres:16-alpine
+    container_name: coffee_database
+    restart: unless-stopped
+    user: postgres
+    expose:
+      - "5432"
+    networks:
+      - backend_isolated
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      POSTGRES_USER: coffee_user
+      POSTGRES_PASSWORD: coffee_secure_pass
+      POSTGRES_DB: coffee_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+networks:
+  frontend_net:
+    driver: bridge
+  backend_isolated:
+    driver: bridge
+    internal: true # Isolasi ketat: mencegah koneksi langsung ke/dari jaringan luar
+
+volumes:
+  db_data:

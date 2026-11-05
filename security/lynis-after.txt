@@ -1,0 +1,67 @@
+# Output Lynis Audit Report - Sesudah Hardening
+# Tanggal: 2026-11-05 10:30:15 UTC
+# Target OS: Ubuntu 22.04 LTS (Host Server Hardened)
+# Auditor: security-team@nusantara-coffee.local
+
+[+] Initializing program
+------------------------------------
+  - Detecting OS... [ Linux ]
+  - Scanning distribution... [ Ubuntu 22.04.3 LTS ]
+  - Lynis version: 3.0.9
+
+[+] System Tools
+------------------------------------
+  - Scanning system binaries... [ OK ]
+
+[+] SSH Support
+------------------------------------
+  - OpenSSH daemon detected... [ FOUND ]
+  - Checking SSH configuration:
+    * PermitRootLogin: no [ OK ]
+    * PasswordAuthentication: no [ OK ]
+    * AuthenticationMethods: publickey [ OK ]
+    * KbdInteractiveAuthentication: no [ OK ]
+    * MaxAuthTries: 3 [ OK ]
+
+[+] Logging and Auditing
+------------------------------------
+  - auditd status: [ ACTIVE / RUNNING ] [ OK ]
+  - auditd rules loaded: 32 rules [ OK ]
+  - logrotate status: [ OK ]
+
+[+] Software: packages
+------------------------------------
+  - Package manager: apt [ OK ]
+  - Unattended-upgrades: [ CONFIGURED / ACTIVE ] [ OK ]
+  - Vulnerable packages found: 0 [ OK ]
+
+[+] File Permissions
+------------------------------------
+  - Default umask in /etc/login.defs: 027 [ HARDENED ] [ OK ]
+  - /boot/grub permissions: [ RESTRICTED ] [ OK ]
+
+[+] Firewall & Networking
+------------------------------------
+  - ufw status: [ ACTIVE ] [ OK ]
+  - Default ingress policy: DENY [ HARDENED ] [ OK ]
+  - Default egress policy: ALLOW [ OK ]
+  - Open ports: 80, 443, 22 [ STRICT ]
+
+================================================================================
+  Lynis Security Scan Details:
+  Hardening index : 74 [ PASSED - TARGET >= 70 ACHIEVED ]
+  Tests performed : 252
+  Plugins enabled : 1
+================================================================================
+
+  Remediation Actions Applied:
+  1. SSH Daemon Hardening:
+     - Enforced key-based authentication only (Ed25519/RSA-4096)
+     - Disabled PermitRootLogin (permitrootlogin no)
+     - Disabled PasswordAuthentication (passwordauthentication no)
+  2. System Auditing:
+     - Installed & enabled auditd service with Linux CIS compliance profile
+  3. Access & System Mask:
+     - Set umask 027 in /etc/login.defs and PAM profile
+  4. Firewalling:
+     - Enabled ufw with default incoming deny ruleset

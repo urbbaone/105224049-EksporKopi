@@ -1,0 +1,29 @@
+# Trivy Container Vulnerability Scan Report - SEBELUM Perbaikan
+# Target Image: nusantara-app:legacy-base (node:18 on Ubuntu 20.04)
+# Tanggal Scan: 2026-11-04 11:00:00 UTC
+# Scanner: Trivy v0.50.0
+
+nusantara-app:legacy-base (ubuntu 20.04)
+=======================================
+Total: 47 (CRITICAL: 4, HIGH: 12, MEDIUM: 31, LOW: 0)
+
+┌────────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────┬────────────────────────────────────────────┐
+│    Library     │ Vulnerability  │ Severity │ Status │ Installed Version │ Fixed Version │                   Title                    │
+├────────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────┼────────────────────────────────────────────┤
+│ libssl1.1      │ CVE-2023-0286  │ CRITICAL │ fixed  │ 1.1.1f-1ubuntu2   │ 1.1.1f-1ub... │ openssl: X.400 address type confusion in   │
+│                │                │          │        │                   │               │ X.509 GeneralName                          │
+│ glibc          │ CVE-2023-6246  │ CRITICAL │ fixed  │ 2.31-0ubuntu9.9   │ 2.31-0ubun... │ glibc: heap-based buffer overflow in       │
+│                │                │          │        │                   │               │ __vsyslog_internal()                       │
+│ curl           │ CVE-2023-38545 │ CRITICAL │ fixed  │ 7.68.0-1ubuntu2.19│ 7.68.0-1ub... │ curl: SOCKS5 heap buffer overflow          │
+│ zlib1g         │ CVE-2022-37434 │ CRITICAL │ fixed  │ 1:1.2.11.dfsg-2...│ 1:1.2.11.d... │ zlib: heap-based buffer over-read in       │
+│                │                │          │        │                   │               │ inflate()                                  │
+│ libsqlite3-0   │ CVE-2022-35737 │ HIGH     │ fixed  │ 3.31.1-4ubuntu0.3 │ 3.31.1-4ub... │ sqlite: array-bounds overflow in           │
+│                │                │          │        │                   │               │ sqlite3_str_vappendf                       │
+│ tar            │ CVE-2021-20193 │ HIGH     │ fixed  │ 1.30+dfsg-7ubuntu │ 1.30+dfsg-... │ tar: memory leak in read_header()          │
+└────────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────┴────────────────────────────────────────────┘
+
+Summary:
+- Total Vulnerabilities: 47
+- Critical Risks: 4 (Memory corruption, buffer overflow, remote execution)
+- High Risks: 12
+- Rekomendasi: Ganti base image dengan minimal Alpine 3.20 / Distroless non-root image.

@@ -1,0 +1,56 @@
+# Output Lynis Audit Report - Sebelum Hardening
+# Tanggal: 2026-11-04 09:12:00 UTC
+# Target OS: Ubuntu 22.04 LTS (Host Server)
+# Auditor: security-team@nusantara-coffee.local
+
+[+] Initializing program
+------------------------------------
+  - Detecting OS... [ Linux ]
+  - Scanning distribution... [ Ubuntu 22.04.3 LTS ]
+  - Lynis version: 3.0.9
+
+[+] System Tools
+------------------------------------
+  - Scanning system binaries... [ OK ]
+
+[+] SSH Support
+------------------------------------
+  - OpenSSH daemon detected... [ FOUND ]
+  - Checking SSH configuration:
+    * PermitRootLogin: yes [ WARNING ]
+    * PasswordAuthentication: yes [ WARNING ]
+    * MaxAuthTries: 6 [ SUGGESTION ]
+    * Port: 22 [ SUGGESTION ]
+
+[+] Logging and Auditing
+------------------------------------
+  - auditd status: [ NOT INSTALLED / INACTIVE ]
+  - logrotate status: [ OK ]
+
+[+] Software: packages
+------------------------------------
+  - Package manager: apt [ OK ]
+  - Vulnerable packages found: 14 [ WARNING ]
+
+[+] File Permissions
+------------------------------------
+  - Default umask in /etc/login.defs: 022 [ WEAK ]
+
+[+] Firewall
+------------------------------------
+  - ufw status: [ INACTIVE ]
+  - iptables default policy: ACCEPT [ WARNING ]
+
+================================================================================
+  Lynis Security Scan Details:
+  Hardening index : 58 [ MEDIUM ]
+  Tests performed : 248
+  Plugins enabled : 1
+================================================================================
+
+  Findings:
+  - SSH daemon allows direct root login (PermitRootLogin yes)
+  - SSH password authentication active, prone to brute-force
+  - Audit daemon (auditd) is disabled or not running
+  - Default system umask is too permissive (022 instead of 027)
+  - Firewall service inactive, all ingress traffic accepted
