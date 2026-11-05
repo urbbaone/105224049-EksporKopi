@@ -1,5 +1,5 @@
 // prisma/schema.prisma
-// Model untuk dokumen ekspor kopi (Coffee Export Documents)
+// Model untuk platform ekspor kopi: Shipment (Induk) & Document (Anak)
 // Prisma 7 + PostgreSQL
 
 generator client {
@@ -12,21 +12,40 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────────────────
-// Model utama: Dokumen ekspor kopi
+// Entitas Induk (Parent): Pengiriman Ekspor Kopi (Shipment)
+// ─────────────────────────────────────────────────────────
+model Shipment {
+  id             String     @id @default(cuid())
+  trackingNumber String     @unique               // Nomor resi/BL: misal EXP-2026-001
+  destination    String                           // Negara/Kota tujuan (misal: Hamburg, Germany)
+  totalKg        Float      @default(0)           // Berat muatan kopi dalam Kilogram (> 0)
+  status         String     @default("PENDING")   // PENDING | IN_TRANSIT | DELIVERED
+  description    String?                          // Catatan instruksi pengiriman
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relasi One-to-Many ke Dokumen Legalitas Ekspor
+  documents      Document[]
+
+  @@map("shipments")
+}
+
+// ─────────────────────────────────────────────────────────
+// Entitas Anak (Child): Dokumen Legalitas Ekspor (Document)
 // ─────────────────────────────────────────────────────────
 model Document {
-  id        String   @id @default(cuid())  // ID unik otomatis
-  title     String                          // Judul dokumen
-  type      String                          // Jenis: Certificate, Invoice, dll.
-  status    String   @default("Pending")   // Status: Pending | Verified | Rejected
-  origin    String                          // Asal daerah kopi
-  grade     String                          // Grade kopi: Grade 1/2/3
-  uploader  String                          // Nama pengunggah
-  notes     String?                         // Catatan tambahan (opsional)
-  sizeKB    Int      @default(0)            // Ukuran file (placeholder)
+  id             String     @id @default(cuid())
+  title          String                           // Judul dokumen (min 3 karakter)
+  type           String                           // Phytosanitary | Certificate of Origin | Commercial Invoice
+  fee            Float      @default(0)           // Biaya legalisasi dokumen (> 0)
+  status         String     @default("PENDING")   // PENDING | VERIFIED | REJECTED
+  notes          String?                          // Catatan tambahan
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
-  createdAt DateTime @default(now())       // Waktu upload
-  updatedAt DateTime @updatedAt            // Waktu update terakhir
+  // Foreign Key & Relasi ke Entitas Induk (Shipment)
+  shipmentId     String
+  shipment       Shipment   @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
 
-  @@map("documents")                        // Nama tabel di database
+  @@map("documents")
 }

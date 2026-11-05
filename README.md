@@ -1,145 +1,154 @@
 # ☕ Nusantara Coffee Export — Secure Document Platform
 
-> **Praktikum Pengembangan Aplikasi Web (PAW) · Kelompok 7**
-> Milestone 1 — Front-End UI
+> **Praktikum Pengembangan Aplikasi Web (PAW)**  
+> **Milestone 2 (v0.2)** — Integrasi Logika Server, Database PostgreSQL, Prisma ORM 7, Server Actions, & Validasi Zod
 
 ---
 
-## 📌 Deskripsi Produk
+## 📌 Deskripsi Produk & Tujuan Aplikasi
 
-**Nusantara Coffee Export** adalah platform web untuk manajemen dokumen ekspor kopi premium Indonesia. Platform ini dirancang untuk membantu eksportir kopi dalam:
+**Nusantara Coffee Export** adalah platform web modern untuk manajemen rantai pasok dan dokumen legalitas ekspor komoditas kopi premium Indonesia ke pasar internasional.
 
-- Mengelola dokumen legalitas ekspor (sertifikat, invoice, phytosanitary, dll.)
-- Memantau status verifikasi dokumen secara real-time
-- Menelusuri varietas kopi dan stok yang siap diekspor
-
-### Permasalahan yang Diselesaikan
-Proses ekspor kopi Indonesia melibatkan banyak dokumen lintas instansi. Platform ini menyederhanakan pengelolaan dokumen tersebut sekaligus mempersiapkan fondasi untuk **enkripsi dan keamanan data** di milestone berikutnya.
-
-### Sasaran Pengguna
-- Eksportir kopi skala menengah–besar
-- Tim QC dan compliance di perusahaan ekspor
-- Buyer internasional yang membutuhkan verifikasi dokumen
+Pada **Milestone 2 (`v0.2`)**, platform ini mengintegrasikan lapisan server secara penuh:
+- Menyimpan data pengiriman (*shipments*) dan dokumen legalitas ekspor secara persisten ke database relasional **PostgreSQL**.
+- Mengelola pemodelan data relasional (One-to-Many) menggunakan **Prisma ORM 7**.
+- Mengimplementasikan seluruh mutasi data (CRUD) menggunakan standar modern **Next.js Server Actions** dengan revalidasi path dinamis.
+- Mengamankan integritas input data melalui validasi ketat sisi server (**Zod**) dengan pemetaan pesan kesalahan langsung pada elemen input terkait di antarmuka.
 
 ---
 
-## ✨ Fitur Utama (Milestone 1)
+## 🚀 Changelog Pembaruan Fitur (v0.1 ke v0.2)
 
-| Halaman | Fitur |
-|---|---|
-| **Home** | Landing page: hero, quality process, coffee catalog, grading table |
-| **Dashboard** | Statistik ringkasan, dokumen terbaru, daftar lot kopi aktif, quick actions |
-| **Documents** | Daftar dokumen dengan filter status & tipe, detail modal, badge status |
-| **Upload** | Form upload dengan validasi client-side (Zod + React Hook Form) |
-
-### Komponen Reusable (`/src/components/`)
-- `Button.tsx` — Tombol multi-varian (primary, secondary, danger, ghost) + loading state
-- `Input.tsx` — Input field dengan label, hint, dan error message aksesibel
-- `SelectField.tsx` — Dropdown dengan validasi dan error
-- `Navbar.tsx` — Navigasi responsif dengan hamburger menu (mobile)
-- `Card.tsx` + `StatCard` — Kartu tampilan data
-- `Badge.tsx` — Badge status berwarna (Verified, Pending, Rejected)
-- `Alert.tsx` — Notifikasi dismissible (success, error, warning, info)
-- `Modal.tsx` — Dialog modal aksesibel dengan keyboard trap & Escape key
+| Kategori | Milestone 1 (`v0.1`) | Milestone 2 (`v0.2`) |
+|---|---|---|
+| **Penyimpanan Data** | Mock Data (in-memory) & simulasi client | Database PostgreSQL terintegrasi via **Prisma ORM 7** |
+| **Pemodelan Data** | Tipe statis sederhana tanpa relasi | Relasi One-to-Many: `Shipment` (Induk) $\rightarrow$ `Document` (Anak) dengan onDelete: Cascade |
+| **Logika Mutasi** | State React lokal | **Next.js Server Actions** (`useActionState`, `revalidatePath`) |
+| **Validasi Input** | Validasi sisi klien saja | Validasi ketat sisi server menggunakan **Zod Schema** |
+| **Inisialisasi Data** | Data hardcoded | Skrip database seeder otomatis (`prisma/seed.ts` via `prisma db seed`) |
+| **Rute Baru** | Home, Dashboard, Upload | CRUD lengkap: `/shipments`, `/shipments/new`, `/shipments/[id]`, `/shipments/[id]/edit`, `/documents`, `/documents/new`, `/documents/[id]/edit` |
 
 ---
 
-## 🛠️ Teknologi
+## 🛠️ Stack & Teknologi
 
-| Layer | Teknologi |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Form & Validasi | React Hook Form + Zod |
-| Font | Geist (Vercel) |
+| Layer | Teknologi | Keterangan |
+|---|---|---|
+| **Framework** | Next.js 16 (App Router) | Server Components & Server Actions |
+| **Database** | PostgreSQL | Database relasional persisten |
+| **ORM** | Prisma ORM 7 (`@prisma/client`, `@prisma/adapter-pg`) | Object-Relational Mapping & Migrations |
+| **Validasi** | Zod | Server-side Schema Validation |
+| **Styling** | Tailwind CSS v4 | Desain responsif bertema kopi modern |
+| **Bahasa** | TypeScript 5 | Strict type-safety end-to-end |
 
 ---
 
-## 📁 Struktur Folder
+## 📐 Pemodelan Data Relasional (`prisma/schema.prisma`)
 
-```
-my-app/
-├── app/
-│   ├── layout.tsx          # Root layout (Navbar + Footer)
-│   ├── page.tsx            # Halaman Home / Landing
-│   ├── dashboard/
-│   │   └── page.tsx        # Halaman Dashboard
-│   ├── documents/
-│   │   └── page.tsx        # Halaman Daftar Dokumen
-│   └── upload/
-│       └── page.tsx        # Halaman Upload Form
-├── src/
-│   ├── components/         # Komponen reusable
-│   │   ├── Alert.tsx
-│   │   ├── Badge.tsx
-│   │   ├── Button.tsx
-│   │   ├── Card.tsx
-│   │   ├── Input.tsx
-│   │   ├── Modal.tsx
-│   │   ├── Navbar.tsx
-│   │   └── SelectField.tsx
-│   └── lib/
-│       └── mockData.ts     # Mock data (dokumen & varietas kopi)
-├── docs/                   # Screenshot dan dokumentasi
-├── public/                 # Aset statis
-├── package.json
-└── README.md
+Aplikasi menggunakan minimal 2 entitas berelasi One-to-Many:
+1. **Entitas Induk (`Shipment`):** Merepresentasikan kontainer pengiriman ekspor (tracking number, negara tujuan, berat muatan dsb).
+2. **Entitas Anak (`Document`):** Dokumen legalitas (Phytosanitary, Certificate of Origin, Invoice dsb) yang menempel ke shipment terkait via `shipmentId`.
+
+```prisma
+model Shipment {
+  id             String     @id @default(cuid())
+  trackingNumber String     @unique
+  destination    String
+  totalKg        Float      @default(0)
+  status         String     @default("PENDING") // PENDING | IN_TRANSIT | DELIVERED
+  description    String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  documents      Document[]
+
+  @@map("shipments")
+}
+
+model Document {
+  id             String     @id @default(cuid())
+  title          String
+  type           String
+  fee            Float      @default(0)
+  status         String     @default("PENDING") // PENDING | VERIFIED | REJECTED
+  notes          String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  shipmentId     String
+  shipment       Shipment   @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
 ```
 
 ---
 
-## 🚀 Cara Menjalankan Proyek
+## ⚙️ Panduan Menjalankan Proyek Secara Lokal
 
-### Prasyarat
-- Node.js ≥ 18
-- npm ≥ 9
-
-### Langkah Instalasi
-
+### 1. Salin Pengaturan Lingkungan
+Salin file template `.env.example` menjadi `.env`:
 ```bash
-# 1. Clone repository
-git clone https://github.com/<username>/praktikum-paw.git
-cd praktikum-paw/my-app
+cp .env.example .env
+```
+Pastikan `DATABASE_URL` mengarah ke database PostgreSQL lokal Anda:
+```env
+DATABASE_URL="postgresql://postgres:1234@localhost:5432/coffee_export_db?schema=public"
+```
 
-# 2. Install dependencies
+### 2. Pasang Dependensi
+```bash
 npm install
+```
 
-# 3. Jalankan development server
+### 3. Generate Prisma Client & Eksekusi Migrasi
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
+
+### 4. Eksekusi Database Seed (Data Sintetis Awal)
+```bash
+npx prisma db seed
+```
+*Perintah ini akan mengisi 3 data Shipment dan 6 Dokumen legalitas berelasi secara otomatis.*
+
+### 5. Jalankan Server Pengembangan
+```bash
 npm run dev
 ```
-
-Buka [http://localhost:3000](http://localhost:3000) di browser.
-
-### Build Production
-
-```bash
-npm run build
-npm start
-```
+Buka browser pada [http://localhost:3000](http://localhost:3000).
+- Kelola Pengiriman Induk: [http://localhost:3000/shipments](http://localhost:3000/shipments)
+- Kelola Dokumen Anak: [http://localhost:3000/documents](http://localhost:3000/documents)
 
 ---
 
-## 🗺️ Roadmap Milestone
+## 🧪 Dokumentasi Pengujian (QA Plan)
 
-| Milestone | Cakupan |
-|---|---|
-| **M1 (sekarang)** | Front-End UI: React, TypeScript, Tailwind, form validasi |
-| **M2** | Backend API (Node.js/Express), database PostgreSQL, JWT auth |
-| **M3** | Kriptografi: enkripsi AES-256, digital signature RSA, HTTPS/TLS |
+Laporan pengujian lengkap dapat dilihat pada [tests-docs/laporan-pengujian-qa.md](./tests-docs/laporan-pengujian-qa.md).
+
+### Ringkasan 10 Skenario Pengujian
+
+| Kode Skenario | Entitas | Skenario | Status |
+|---|---|---|---|
+| `TC-EA-01` | Shipment (Induk) | **Create**: Menambah data shipment valid via Server Action | **Lulus** |
+| `TC-EA-02` | Shipment (Induk) | **Read**: Menampilkan daftar shipment dari PostgreSQL | **Lulus** |
+| `TC-EA-03` | Shipment (Induk) | **Update**: Mengubah rincian data shipment | **Lulus** |
+| `TC-EA-04` | Shipment (Induk) | **Delete**: Menghapus shipment beserta penanganan relasi (Cascade) | **Lulus** |
+| `TC-EB-01` | Document (Anak) | **Create**: Menambah data dokumen terhubung ke parentId | **Lulus** |
+| `TC-EB-02` | Document (Anak) | **Read**: Menampilkan daftar dokumen beserta relasi induk | **Lulus** |
+| `TC-EB-03` | Document (Anak) | **Update**: Memperbarui status / biaya dokumen | **Lulus** |
+| `TC-EB-04` | Document (Anak) | **Delete**: Menghapus dokumen secara mandiri tanpa merusak parent | **Lulus** |
+| `TC-REL-01` | Relasi | **Foreign Key Constraint**: Integritas relasi shipmentId | **Lulus** |
+| `TC-REL-02` | Relasi | **Relational Fetching**: Fetching eager berkas anak di detail induk | **Lulus** |
 
 ---
 
-## 📸 Bukti Pengerjaan
+## 🛡️ Bukti Validasi Server-Side (Zod)
 
-Lihat folder [`/docs/`](./docs/) untuk:
-- Screenshot tampilan responsif (360 px, 768 px, 1280 px)
-- Laporan Lighthouse Accessibility
-- Bukti form validasi error message
-
----
-
-## 👥 Kelompok 7
-
-Praktikum Pengembangan Aplikasi Web  
-Tahun Akademik 2026/2027
+1. **Kasus 1: Input Kosong / Kurang Karakter (String Length Violation)**
+   - *Pesan Error UI:* `"Judul minimal terdiri dari 3 karakter"` di bawah input judul dokumen.
+2. **Kasus 2: Nilai Numerik / Batasan Angka Tidak Valid (Numeric Violation)**
+   - *Pesan Error UI:* `"Nilai harus bernilai positif (> 0)"` jika biaya $\le 0$.
+3. **Kasus 3: Relasi Parent Kosong (Required Foreign Key)**
+   - *Pesan Error UI:* `"Entitas relasi induk wajib dipilih"` jika belum memilih shipment.

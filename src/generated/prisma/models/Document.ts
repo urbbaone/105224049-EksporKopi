@@ -27,105 +27,93 @@ export type AggregateDocument = {
 }
 
 export type DocumentAvgAggregateOutputType = {
-  sizeKB: number | null
+  fee: number | null
 }
 
 export type DocumentSumAggregateOutputType = {
-  sizeKB: number | null
+  fee: number | null
 }
 
 export type DocumentMinAggregateOutputType = {
   id: string | null
   title: string | null
   type: string | null
+  fee: number | null
   status: string | null
-  origin: string | null
-  grade: string | null
-  uploader: string | null
   notes: string | null
-  sizeKB: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  shipmentId: string | null
 }
 
 export type DocumentMaxAggregateOutputType = {
   id: string | null
   title: string | null
   type: string | null
+  fee: number | null
   status: string | null
-  origin: string | null
-  grade: string | null
-  uploader: string | null
   notes: string | null
-  sizeKB: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  shipmentId: string | null
 }
 
 export type DocumentCountAggregateOutputType = {
   id: number
   title: number
   type: number
+  fee: number
   status: number
-  origin: number
-  grade: number
-  uploader: number
   notes: number
-  sizeKB: number
   createdAt: number
   updatedAt: number
+  shipmentId: number
   _all: number
 }
 
 
 export type DocumentAvgAggregateInputType = {
-  sizeKB?: true
+  fee?: true
 }
 
 export type DocumentSumAggregateInputType = {
-  sizeKB?: true
+  fee?: true
 }
 
 export type DocumentMinAggregateInputType = {
   id?: true
   title?: true
   type?: true
+  fee?: true
   status?: true
-  origin?: true
-  grade?: true
-  uploader?: true
   notes?: true
-  sizeKB?: true
   createdAt?: true
   updatedAt?: true
+  shipmentId?: true
 }
 
 export type DocumentMaxAggregateInputType = {
   id?: true
   title?: true
   type?: true
+  fee?: true
   status?: true
-  origin?: true
-  grade?: true
-  uploader?: true
   notes?: true
-  sizeKB?: true
   createdAt?: true
   updatedAt?: true
+  shipmentId?: true
 }
 
 export type DocumentCountAggregateInputType = {
   id?: true
   title?: true
   type?: true
+  fee?: true
   status?: true
-  origin?: true
-  grade?: true
-  uploader?: true
   notes?: true
-  sizeKB?: true
   createdAt?: true
   updatedAt?: true
+  shipmentId?: true
   _all?: true
 }
 
@@ -219,14 +207,12 @@ export type DocumentGroupByOutputType = {
   id: string
   title: string
   type: string
+  fee: number
   status: string
-  origin: string
-  grade: string
-  uploader: string
   notes: string | null
-  sizeKB: number
   createdAt: Date
   updatedAt: Date
+  shipmentId: string
   _count: DocumentCountAggregateOutputType | null
   _avg: DocumentAvgAggregateOutputType | null
   _sum: DocumentSumAggregateOutputType | null
@@ -256,28 +242,26 @@ export type DocumentWhereInput = {
   id?: Prisma.StringFilter<"Document"> | string
   title?: Prisma.StringFilter<"Document"> | string
   type?: Prisma.StringFilter<"Document"> | string
+  fee?: Prisma.FloatFilter<"Document"> | number
   status?: Prisma.StringFilter<"Document"> | string
-  origin?: Prisma.StringFilter<"Document"> | string
-  grade?: Prisma.StringFilter<"Document"> | string
-  uploader?: Prisma.StringFilter<"Document"> | string
   notes?: Prisma.StringNullableFilter<"Document"> | string | null
-  sizeKB?: Prisma.IntFilter<"Document"> | number
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  shipmentId?: Prisma.StringFilter<"Document"> | string
+  shipment?: Prisma.XOR<Prisma.ShipmentScalarRelationFilter, Prisma.ShipmentWhereInput>
 }
 
 export type DocumentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
-  grade?: Prisma.SortOrder
-  uploader?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  sizeKB?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipmentId?: Prisma.SortOrder
+  shipment?: Prisma.ShipmentOrderByWithRelationInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -287,28 +271,25 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   title?: Prisma.StringFilter<"Document"> | string
   type?: Prisma.StringFilter<"Document"> | string
+  fee?: Prisma.FloatFilter<"Document"> | number
   status?: Prisma.StringFilter<"Document"> | string
-  origin?: Prisma.StringFilter<"Document"> | string
-  grade?: Prisma.StringFilter<"Document"> | string
-  uploader?: Prisma.StringFilter<"Document"> | string
   notes?: Prisma.StringNullableFilter<"Document"> | string | null
-  sizeKB?: Prisma.IntFilter<"Document"> | number
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  shipmentId?: Prisma.StringFilter<"Document"> | string
+  shipment?: Prisma.XOR<Prisma.ShipmentScalarRelationFilter, Prisma.ShipmentWhereInput>
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
-  grade?: Prisma.SortOrder
-  uploader?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
-  sizeKB?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipmentId?: Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
   _avg?: Prisma.DocumentAvgOrderByAggregateInput
   _max?: Prisma.DocumentMaxOrderByAggregateInput
@@ -323,96 +304,81 @@ export type DocumentScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Document"> | string
   title?: Prisma.StringWithAggregatesFilter<"Document"> | string
   type?: Prisma.StringWithAggregatesFilter<"Document"> | string
+  fee?: Prisma.FloatWithAggregatesFilter<"Document"> | number
   status?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  origin?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  grade?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  uploader?: Prisma.StringWithAggregatesFilter<"Document"> | string
   notes?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  sizeKB?: Prisma.IntWithAggregatesFilter<"Document"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
+  shipmentId?: Prisma.StringWithAggregatesFilter<"Document"> | string
 }
 
 export type DocumentCreateInput = {
   id?: string
   title: string
   type: string
+  fee?: number
   status?: string
-  origin: string
-  grade: string
-  uploader: string
   notes?: string | null
-  sizeKB?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipment: Prisma.ShipmentCreateNestedOneWithoutDocumentsInput
 }
 
 export type DocumentUncheckedCreateInput = {
   id?: string
   title: string
   type: string
+  fee?: number
   status?: string
-  origin: string
-  grade: string
-  uploader: string
   notes?: string | null
-  sizeKB?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipmentId: string
 }
 
 export type DocumentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  origin?: Prisma.StringFieldUpdateOperationsInput | string
-  grade?: Prisma.StringFieldUpdateOperationsInput | string
-  uploader?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sizeKB?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipment?: Prisma.ShipmentUpdateOneRequiredWithoutDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  origin?: Prisma.StringFieldUpdateOperationsInput | string
-  grade?: Prisma.StringFieldUpdateOperationsInput | string
-  uploader?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sizeKB?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipmentId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type DocumentCreateManyInput = {
   id?: string
   title: string
   type: string
+  fee?: number
   status?: string
-  origin: string
-  grade: string
-  uploader: string
   notes?: string | null
-  sizeKB?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipmentId: string
 }
 
 export type DocumentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  origin?: Prisma.StringFieldUpdateOperationsInput | string
-  grade?: Prisma.StringFieldUpdateOperationsInput | string
-  uploader?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sizeKB?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -421,84 +387,215 @@ export type DocumentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  origin?: Prisma.StringFieldUpdateOperationsInput | string
-  grade?: Prisma.StringFieldUpdateOperationsInput | string
-  uploader?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sizeKB?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type DocumentListRelationFilter = {
+  every?: Prisma.DocumentWhereInput
+  some?: Prisma.DocumentWhereInput
+  none?: Prisma.DocumentWhereInput
+}
+
+export type DocumentOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
-  grade?: Prisma.SortOrder
-  uploader?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  sizeKB?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipmentId?: Prisma.SortOrder
 }
 
 export type DocumentAvgOrderByAggregateInput = {
-  sizeKB?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
 }
 
 export type DocumentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
-  grade?: Prisma.SortOrder
-  uploader?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  sizeKB?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipmentId?: Prisma.SortOrder
 }
 
 export type DocumentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  origin?: Prisma.SortOrder
-  grade?: Prisma.SortOrder
-  uploader?: Prisma.SortOrder
   notes?: Prisma.SortOrder
-  sizeKB?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipmentId?: Prisma.SortOrder
 }
 
 export type DocumentSumOrderByAggregateInput = {
-  sizeKB?: Prisma.SortOrder
+  fee?: Prisma.SortOrder
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type DocumentCreateNestedManyWithoutShipmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput> | Prisma.DocumentCreateWithoutShipmentInput[] | Prisma.DocumentUncheckedCreateWithoutShipmentInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutShipmentInput | Prisma.DocumentCreateOrConnectWithoutShipmentInput[]
+  createMany?: Prisma.DocumentCreateManyShipmentInputEnvelope
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type DocumentUncheckedCreateNestedManyWithoutShipmentInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput> | Prisma.DocumentCreateWithoutShipmentInput[] | Prisma.DocumentUncheckedCreateWithoutShipmentInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutShipmentInput | Prisma.DocumentCreateOrConnectWithoutShipmentInput[]
+  createMany?: Prisma.DocumentCreateManyShipmentInputEnvelope
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type DocumentUpdateManyWithoutShipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput> | Prisma.DocumentCreateWithoutShipmentInput[] | Prisma.DocumentUncheckedCreateWithoutShipmentInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutShipmentInput | Prisma.DocumentCreateOrConnectWithoutShipmentInput[]
+  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutShipmentInput | Prisma.DocumentUpsertWithWhereUniqueWithoutShipmentInput[]
+  createMany?: Prisma.DocumentCreateManyShipmentInputEnvelope
+  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutShipmentInput | Prisma.DocumentUpdateWithWhereUniqueWithoutShipmentInput[]
+  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutShipmentInput | Prisma.DocumentUpdateManyWithWhereWithoutShipmentInput[]
+  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type DocumentUncheckedUpdateManyWithoutShipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput> | Prisma.DocumentCreateWithoutShipmentInput[] | Prisma.DocumentUncheckedCreateWithoutShipmentInput[]
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutShipmentInput | Prisma.DocumentCreateOrConnectWithoutShipmentInput[]
+  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutShipmentInput | Prisma.DocumentUpsertWithWhereUniqueWithoutShipmentInput[]
+  createMany?: Prisma.DocumentCreateManyShipmentInputEnvelope
+  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutShipmentInput | Prisma.DocumentUpdateWithWhereUniqueWithoutShipmentInput[]
+  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutShipmentInput | Prisma.DocumentUpdateManyWithWhereWithoutShipmentInput[]
+  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+}
+
+export type DocumentCreateWithoutShipmentInput = {
+  id?: string
+  title: string
+  type: string
+  fee?: number
+  status?: string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DocumentUncheckedCreateWithoutShipmentInput = {
+  id?: string
+  title: string
+  type: string
+  fee?: number
+  status?: string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DocumentCreateOrConnectWithoutShipmentInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput>
+}
+
+export type DocumentCreateManyShipmentInputEnvelope = {
+  data: Prisma.DocumentCreateManyShipmentInput | Prisma.DocumentCreateManyShipmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type DocumentUpsertWithWhereUniqueWithoutShipmentInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  update: Prisma.XOR<Prisma.DocumentUpdateWithoutShipmentInput, Prisma.DocumentUncheckedUpdateWithoutShipmentInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutShipmentInput, Prisma.DocumentUncheckedCreateWithoutShipmentInput>
+}
+
+export type DocumentUpdateWithWhereUniqueWithoutShipmentInput = {
+  where: Prisma.DocumentWhereUniqueInput
+  data: Prisma.XOR<Prisma.DocumentUpdateWithoutShipmentInput, Prisma.DocumentUncheckedUpdateWithoutShipmentInput>
+}
+
+export type DocumentUpdateManyWithWhereWithoutShipmentInput = {
+  where: Prisma.DocumentScalarWhereInput
+  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutShipmentInput>
+}
+
+export type DocumentScalarWhereInput = {
+  AND?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  OR?: Prisma.DocumentScalarWhereInput[]
+  NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+  id?: Prisma.StringFilter<"Document"> | string
+  title?: Prisma.StringFilter<"Document"> | string
+  type?: Prisma.StringFilter<"Document"> | string
+  fee?: Prisma.FloatFilter<"Document"> | number
+  status?: Prisma.StringFilter<"Document"> | string
+  notes?: Prisma.StringNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  shipmentId?: Prisma.StringFilter<"Document"> | string
+}
+
+export type DocumentCreateManyShipmentInput = {
+  id?: string
+  title: string
+  type: string
+  fee?: number
+  status?: string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DocumentUpdateWithoutShipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentUncheckedUpdateWithoutShipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DocumentUncheckedUpdateManyWithoutShipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  fee?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -507,75 +604,79 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   title?: boolean
   type?: boolean
+  fee?: boolean
   status?: boolean
-  origin?: boolean
-  grade?: boolean
-  uploader?: boolean
   notes?: boolean
-  sizeKB?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  shipmentId?: boolean
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   type?: boolean
+  fee?: boolean
   status?: boolean
-  origin?: boolean
-  grade?: boolean
-  uploader?: boolean
   notes?: boolean
-  sizeKB?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  shipmentId?: boolean
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   type?: boolean
+  fee?: boolean
   status?: boolean
-  origin?: boolean
-  grade?: boolean
-  uploader?: boolean
   notes?: boolean
-  sizeKB?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  shipmentId?: boolean
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
   id?: boolean
   title?: boolean
   type?: boolean
+  fee?: boolean
   status?: boolean
-  origin?: boolean
-  grade?: boolean
-  uploader?: boolean
   notes?: boolean
-  sizeKB?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  shipmentId?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "status" | "origin" | "grade" | "uploader" | "notes" | "sizeKB" | "createdAt" | "updatedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "fee" | "status" | "notes" | "createdAt" | "updatedAt" | "shipmentId", ExtArgs["result"]["document"]>
+export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
+}
+export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
+}
+export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  shipment?: boolean | Prisma.ShipmentDefaultArgs<ExtArgs>
+}
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Document"
-  objects: {}
+  objects: {
+    shipment: Prisma.$ShipmentPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     type: string
+    fee: number
     status: string
-    origin: string
-    grade: string
-    uploader: string
     notes: string | null
-    sizeKB: number
     createdAt: Date
     updatedAt: Date
+    shipmentId: string
   }, ExtArgs["result"]["document"]>
   composites: {}
 }
@@ -970,6 +1071,7 @@ readonly fields: DocumentFieldRefs;
  */
 export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  shipment<T extends Prisma.ShipmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShipmentDefaultArgs<ExtArgs>>): Prisma.Prisma__ShipmentClient<runtime.Types.Result.GetResult<Prisma.$ShipmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1002,14 +1104,12 @@ export interface DocumentFieldRefs {
   readonly id: Prisma.FieldRef<"Document", 'String'>
   readonly title: Prisma.FieldRef<"Document", 'String'>
   readonly type: Prisma.FieldRef<"Document", 'String'>
+  readonly fee: Prisma.FieldRef<"Document", 'Float'>
   readonly status: Prisma.FieldRef<"Document", 'String'>
-  readonly origin: Prisma.FieldRef<"Document", 'String'>
-  readonly grade: Prisma.FieldRef<"Document", 'String'>
-  readonly uploader: Prisma.FieldRef<"Document", 'String'>
   readonly notes: Prisma.FieldRef<"Document", 'String'>
-  readonly sizeKB: Prisma.FieldRef<"Document", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
+  readonly shipmentId: Prisma.FieldRef<"Document", 'String'>
 }
     
 
@@ -1026,6 +1126,10 @@ export type DocumentFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * Filter, which Document to fetch.
    */
@@ -1045,6 +1149,10 @@ export type DocumentFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  /**
    * Filter, which Document to fetch.
    */
   where: Prisma.DocumentWhereUniqueInput
@@ -1062,6 +1170,10 @@ export type DocumentFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * Filter, which Document to fetch.
    */
@@ -1111,6 +1223,10 @@ export type DocumentFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  /**
    * Filter, which Document to fetch.
    */
   where?: Prisma.DocumentWhereInput
@@ -1158,6 +1274,10 @@ export type DocumentFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * Filter, which Documents to fetch.
    */
@@ -1207,6 +1327,10 @@ export type DocumentCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
+  /**
    * The data needed to create a Document.
    */
   data: Prisma.XOR<Prisma.DocumentCreateInput, Prisma.DocumentUncheckedCreateInput>
@@ -1240,6 +1364,10 @@ export type DocumentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.DocumentCreateManyInput | Prisma.DocumentCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1254,6 +1382,10 @@ export type DocumentUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * The data needed to update a Document.
    */
@@ -1306,6 +1438,10 @@ export type DocumentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many Documents to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1320,6 +1456,10 @@ export type DocumentUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * The filter to search for the Document to update in case it exists.
    */
@@ -1346,6 +1486,10 @@ export type DocumentDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
   /**
    * Filter which Document to delete.
    */
@@ -1378,4 +1522,8 @@ export type DocumentDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Document
    */
   omit?: Prisma.DocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentInclude<ExtArgs> | null
 }
