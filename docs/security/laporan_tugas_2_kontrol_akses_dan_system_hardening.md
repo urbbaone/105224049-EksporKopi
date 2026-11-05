@@ -1,6 +1,7 @@
 # Laporan Pengujian Akses dan System Hardening (Tugas 2)
 
 **Tag Rilis:** `sec-0.2`  
+**Commit Hash:** `98b87a04ae3b2b69a5b1a41be1d456d7f38475d8`  
 **Proyek:** Nusantara Coffee Export Platform  
 **Status Evaluasi:** Memenuhi Target Rubrik 100 Poin (C3)
 
