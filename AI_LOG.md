@@ -41,6 +41,35 @@
 
 ### Validasi
 - Setiap threat merujuk elemen DFD spesifik (bukan generik)
-- Alasan kemungkinan dan dampak berdasarkan kondisi aktual produk (mock data di JS bundle, no auth, HTTP dev mode, shared GitHub repo)
-- Rencana kontrol dipetakan ke milestone yang sesuai (M2 untuk backend/auth, M3 untuk kriptografi)
+
+---
+
+## Tugas 2 (Tag v0.2) — Enkripsi Terautentikasi & Integritas Data (2026-11-05)
+
+### Apa yang dikerjakan
+1. **Pemilihan & Konfigurasi Algoritma AEAD** (`docs/KEPUTUSAN.md`)
+   - Memilih algoritma `AES-256-GCM` menggunakan modul standar runtime `node:crypto`.
+   - Menetapkan parameter kunci 256-bit CSPRNG, IV 96-bit unik tiap enkripsi, tag otentikasi 128-bit, dan penanganan AAD.
+2. **Implementasi Komponen Kriptografi & Validasi** (`src/security/crypto.service.ts`, `src/security/crypto.schema.ts`)
+   - Membangun `CryptoService` yang bersifat *fail-closed* terhadap kesalahan integritas atau kunci salah.
+   - Mengintegrasikan validasi masukan menggunakan pustaka Zod (`crypto.schema.ts`).
+3. **Pengujian Komprehensif** (`tests/crypto.test.ts`)
+   - Menyusun 7 skenario pengujian dengan Vitest (3 kasus positif: siklus enkripsi/dekripsi, integritas AAD, keunikan Nonce/IV; 4 kasus negatif: manipulasi ciphertext, manipulasi auth tag, ketidakcocokan AAD, dan kunci salah).
+4. **Pencegahan Kebocoran Rahasia** (`.env.example`, `.gitignore`)
+   - Memastikan `.env` terdaftar di `.gitignore` dan menyajikan template aman di `.env.example`.
+
+### Prompt yang digunakan
+- "Implementasikan ke projek saya dengan cara beginner friendly" (berdasarkan panduan Tugas 2: implementasi AEAD AES-256-GCM, validasi Zod, pengujian unit test minimal 4 skenario, KEPUTUSAN.md, AI_LOG.md, dan fail-closed architecture).
+
+### AI yang digunakan
+- Google Antigravity (Gemini Flash)
+
+### Kontribusi manusia vs AI
+- **Manusia**: Memberikan instruksi spesifikasi tugas, menetapkan struktur direktori yang dituju, dan menjalankan demonstrasi live run test.
+- **AI**: Membuat modul `CryptoService` dan skema Zod, menulis unit test dengan 7 skenario pengujian, menyusun berkas ADR `KEPUTUSAN.md`, dan mendokumentasikan log AI.
+
+### Validasi
+- Seluruh 7 skenario unit test pada `tests/crypto.test.ts` dan tes sebelumnya berhasil lulus (`npx vitest run`).
+- Pengujian kondisi negatif membuktikan bahwa ciphertext / auth tag yang dimanipulasi berhasil ditolak secara *fail-closed* tanpa kebocoran data.
+
 

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Shipment: 'Shipment',
   Document: 'Document'
 } as const
 
@@ -70,18 +71,30 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const ShipmentScalarFieldEnum = {
+  id: 'id',
+  trackingNumber: 'trackingNumber',
+  destination: 'destination',
+  totalKg: 'totalKg',
+  status: 'status',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShipmentScalarFieldEnum = (typeof ShipmentScalarFieldEnum)[keyof typeof ShipmentScalarFieldEnum]
+
+
 export const DocumentScalarFieldEnum = {
   id: 'id',
   title: 'title',
   type: 'type',
+  fee: 'fee',
   status: 'status',
-  origin: 'origin',
-  grade: 'grade',
-  uploader: 'uploader',
   notes: 'notes',
-  sizeKB: 'sizeKB',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  shipmentId: 'shipmentId'
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]

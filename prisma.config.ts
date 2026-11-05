@@ -1,9 +1,7 @@
 // prisma.config.ts — Konfigurasi Prisma 7
-// PENTING: import ini harus pertama agar .env terbaca oleh Prisma CLI
 import "dotenv/config";
 
 import { defineConfig, env } from "prisma/config";
-import { PrismaPg } from "@prisma/adapter-pg";
 
 export default defineConfig({
   // Lokasi file schema Prisma
@@ -14,11 +12,8 @@ export default defineConfig({
     url: env("DATABASE_URL"),
   },
 
-  // Adapter untuk koneksi saat runtime (prisma db push juga butuh ini)
-  migrate: {
-    adapter: () => {
-      const connectionString = process.env.DATABASE_URL!;
-      return new PrismaPg({ connectionString });
-    },
+  // Konfigurasi seed untuk Prisma CLI
+  migrations: {
+    seed: "npx tsx prisma/seed.ts",
   },
 });

@@ -1,18 +1,19 @@
 // app/api/documents/[id]/route.ts
-// Route Handler untuk satu dokumen: GET (detail) + DELETE (hapus)
-// Prisma 7 + PostgreSQL
+// Route Handler API untuk dokumen: GET (detail) + DELETE (hapus)
 
 import { NextRequest, NextResponse } from "next/server";
-import db from "@/src/lib/db";
+import prisma from "@/lib/prisma";
 
 type Params = { params: Promise<{ id: string }> };
 
-// ── GET /api/documents/[id] — Ambil satu dokumen ───────────────────────────
 export async function GET(_req: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
-    const document = await db.document.findUnique({ where: { id } });
+    const document = await prisma.document.findUnique({
+      where: { id },
+      include: { shipment: true },
+    });
 
     if (!document) {
       return NextResponse.json(
@@ -31,12 +32,11 @@ export async function GET(_req: NextRequest, { params }: Params) {
   }
 }
 
-// ── DELETE /api/documents/[id] — Hapus dokumen ──────────────────────────────
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const { id } = await params;
 
   try {
-    const existing = await db.document.findUnique({ where: { id } });
+    const existing = await prisma.document.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
         { success: false, message: "Dokumen tidak ditemukan." },
@@ -44,7 +44,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
       );
     }
 
-    await db.document.delete({ where: { id } });
+    await prisma.document.delete({ where: { id } });
 
     return NextResponse.json({ success: true, message: "Dokumen berhasil dihapus." });
   } catch (error) {
@@ -55,4 +55,3 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     );
   }
 }
-
